@@ -1,0 +1,124 @@
+function doDash () {
+    light.showRing(
+    `blue blue blue black black black black blue blue blue`
+    )
+    music.playTone(262, music.beat(BeatFraction.Half))
+    pause(500)
+    light.clear()
+}
+function doINIT () {
+    morse = [".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--..", ".----", "..---", "...--", "....-", ".....", "-....", "--...", "---..", "----.", "-----", "/"]
+    alpha = "abcdefghijklmnopqrstuvwxyz"
+    live = "live long and prosper"
+    may = "may the force be with you"
+    never = "never give up never surrender"
+    boldly = "boldly go"
+    message = [alpha, live, may, never, boldly]
+    mnames = ["alpha", "live", "may", "never", "boldly"]
+    alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", " "]
+    encrypt("hello")
+}
+function doSpace () {
+    light.showRing(
+    `black black black purple purple purple purple black black black`
+    )
+    pause(200)
+    light.clear()
+}
+function playCode (text: string) {
+    for (let index = 0; index <= text.length - 1; index++) {
+        if ("-" == text.charAt(index)) {
+            doDash()
+        }
+        if ("." == text.charAt(index)) {
+            doDot()
+        }
+        if (" " == text.charAt(index)) {
+            doSpace()
+            pause(500)
+        }
+    }
+}
+function encrypt (text: string) {
+    for (let index2 = 0; index2 <= text.length - 1; index2++) {
+        chr = text.charAt(index2)
+        if (-1 < alphabet.indexOf(chr)) {
+            code = morse[alphabet.indexOf(chr)]
+        } else {
+            code = " "
+        }
+        playCode(code)
+        doSpace()
+        pause(500)
+    }
+}
+function doDot () {
+    light.showRing(
+    `green black black black black black black black black green`
+    )
+    music.playTone(523, music.beat(BeatFraction.Quarter))
+    pause(200)
+    light.clear()
+}
+// present morse  of current message, advance to next
+// message
+input.buttonA.onEvent(ButtonEvent.Click, function () {
+    encrypt(message[mnum])
+    mnum += 1
+    if (message.length == mnum) {
+        mnum = 0
+    }
+})
+// advance number and display name of current message
+//
+// and number
+input.buttonB.onEvent(ButtonEvent.Click, function () {
+    mnum += 1
+    if (message.length == mnum) {
+        mnum = 0
+    }
+    light.setAll(0x000000)
+    for (let index3 = 0; index3 <= mnum; index3++) {
+        light.setPixelColor(index3, 0xff8000)
+        pause(100)
+    }
+    pause(1000)
+    encrypt(mnames[mnum])
+})
+// show number, name of current message
+input.buttonsAB.onEvent(ButtonEvent.Click, function () {
+    light.setAll(0x000000)
+    for (let index4 = 0; index4 <= mnum; index4++) {
+        light.setPixelColor(index4, 0xff8000)
+        pause(100)
+    }
+    pause(1000)
+    encrypt(mnames[mnum])
+})
+// show number of current message
+input.onGesture(Gesture.Shake, function () {
+    light.setAll(0x000000)
+    for (let index5 = 0; index5 <= mnum; index5++) {
+        light.setPixelColor(index5, 0xff8000)
+        pause(100)
+    }
+    pause(1000)
+})
+let code = ""
+let chr = ""
+let alphabet: string[] = []
+let mnames: string[] = []
+let message: string[] = []
+let boldly = ""
+let never = ""
+let may = ""
+let live = ""
+let alpha = ""
+let morse: string[] = []
+let mnum = 0
+doINIT()
+mnum = 0
+light.showAnimation(light.rainbowAnimation, 500)
+music.magicWand.playUntilDone()
+pause(500)
+light.setAll(0x000000)
