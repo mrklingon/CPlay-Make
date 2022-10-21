@@ -1,0 +1,194 @@
+// Encrypt/display in morse current text, advance
+// pointer to the next one.
+input.touchA1.onEvent(ButtonEvent.Click, function () {
+    PauseLoop()
+    encrypt(verses[vindx])
+    vindx += 1
+    if (vindx > 7) {
+        vindx = 0
+    }
+    restartLoop()
+})
+// display "name" in morse of current text.
+input.touchA2.onEvent(ButtonEvent.Click, function () {
+    PauseLoop()
+    encrypt(VNames[vindx])
+    restartLoop()
+})
+input.buttonsAB.onEvent(ButtonEvent.Click, function () {
+    tmode = MODE
+    MODE = 5
+    if (input.switchRight()) {
+        storage.remove("trc.txt")
+        storage.appendLine("trc.txt", "tricorder")
+        light.showAnimation(light.rainbowAnimation, 500)
+        light.clear()
+    } else {
+        light.showRing(
+        `red red red red red red red red red red`
+        )
+        pause(500)
+        light.clear()
+    }
+    MODE = tmode
+})
+function doDash () {
+    light.showRing(
+    `blue blue blue black black black black blue blue blue`
+    )
+    music.playTone(262, music.beat(BeatFraction.Half))
+    pause(500)
+    light.clear()
+}
+function restartLoop () {
+    MODE = tmode
+}
+function PauseLoop () {
+    tmode = MODE
+    MODE = 5
+}
+function doSpace () {
+    light.showRing(
+    `black black black purple purple purple purple black black black`
+    )
+    pause(200)
+    light.clear()
+}
+function playCode (text: string) {
+    for (let index = 0; index <= text.length - 1; index++) {
+        if ("-" == text.charAt(index)) {
+            doDash()
+        }
+        if ("." == text.charAt(index)) {
+            doDot()
+        }
+        if (" " == text.charAt(index)) {
+            doSpace()
+            pause(500)
+        }
+    }
+}
+input.touchA3.onEvent(ButtonEvent.Click, function () {
+    PauseLoop()
+    if (input.switchRight()) {
+        encrypt(convertToText(vindx))
+    } else {
+        vindx = Math.randomRange(0, 7)
+        encrypt(VNames[vindx])
+    }
+    playCode(code)
+    restartLoop()
+})
+// convert,display text into morse
+//
+function encrypt (text: string) {
+    for (let index2 = 0; index2 <= text.length - 1; index2++) {
+        chr = text.charAt(index2)
+        code = morse[alphabet.indexOf(chr)]
+        playCode(code)
+        doSpace()
+        pause(500)
+    }
+}
+function doDot () {
+    light.showRing(
+    `green black black black black black black black black green`
+    )
+    music.playTone(523, music.beat(BeatFraction.Quarter))
+    pause(200)
+    light.clear()
+}
+input.buttonA.onEvent(ButtonEvent.Click, function () {
+    tmode = MODE
+    MODE = 4
+    tmode += 1
+    if (tmode > 2) {
+        tmode = 0
+    }
+    encrypt(modes[tmode])
+    MODE = tmode
+})
+input.buttonB.onEvent(ButtonEvent.Click, function () {
+    tmode = MODE
+    MODE = 4
+    storage.appendLine("trc.txt", modes[tmode])
+    if (tmode == 0) {
+        encrypt(convertToText(input.soundLevel()))
+        storage.appendLine("trc.txt", convertToText(input.soundLevel()))
+    }
+    if (tmode == 1) {
+        encrypt(convertToText(input.lightLevel()))
+        storage.appendLine("trc.txt", convertToText(input.lightLevel()))
+    }
+    if (tmode == 2) {
+        encrypt(convertToText(input.temperature(TemperatureUnit.Fahrenheit)))
+        storage.appendLine("trc.txt", convertToText(input.temperature(TemperatureUnit.Fahrenheit)))
+        storage.appendLine("trc.txt", convertToText(input.temperature(TemperatureUnit.Celsius)))
+    }
+    MODE = tmode
+})
+input.onGesture(Gesture.Shake, function () {
+    tmode = MODE
+    MODE = 5
+    music.baDing.play()
+    light.showAnimation(light.rainbowAnimation, 1000)
+    music.stopAllSounds()
+    encrypt(modes[tmode])
+    light.clear()
+    MODE = tmode
+})
+let chr = ""
+let code = ""
+let tmode = 0
+let MODE = 0
+let alphabet: string[] = []
+let modes: string[] = []
+let VNames: string[] = []
+let verses: string[] = []
+let morse: string[] = []
+let vindx = 0
+// verse 'name'
+let vn = ""
+// verse text to encrypt
+let verse = ""
+storage.appendLine("trc.txt", "tricorder")
+vindx = 0
+// morse values to display
+//
+morse = [".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--..", ".----", "..---", "...--", "....-", ".....", "-....", "--...", "---..", "----.", "-----", "/"]
+let j316 = "for god so loved the world"
+let P23 = "the lord is my shepherd"
+let Phl4 = "i can do all things"
+let Isaiah263 = "thou wilt keep him in perfect peace"
+let _2Tim316 = "all scripture is given by inspiration of god"
+let gen11 = "in the beginning god created the heaven and the earth"
+let _1pt57 = "he careth for you"
+let i41 = "fear thou not"
+// list of texts
+//
+verses = [Phl4, P23, j316, Isaiah263, _2Tim316, gen11, _1pt57, i41]
+// list of names of texts
+//
+// for A2
+VNames = ["ph4", "p23", "j316", "i26", "2tim", "gen11", "1pt", "i41"]
+// names of modes
+//
+modes = ["sound", "light", "temp"]
+// alphabet/numbers to encode in morse
+//
+alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", " "]
+MODE = 0
+// display initial mode
+//
+encrypt("sound")
+forever(function () {
+    if (MODE == 0) {
+        light.graph(input.soundLevel())
+    }
+    if (MODE == 1) {
+        light.graph(input.lightLevel())
+    }
+    if (MODE == 2) {
+        light.graph(input.temperature(TemperatureUnit.Celsius))
+    }
+})
