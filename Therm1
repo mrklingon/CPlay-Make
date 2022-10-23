@@ -1,0 +1,39 @@
+let ncolor = 0
+let nstring = ""
+let char = ""
+function doDisplay (dnum: number) {
+    ncolor = Colors.Red
+    nstring = convertToText(dnum)
+    if (0 > dnum) {
+        ncolor = Colors.Blue
+    }
+    for (let index = 0; index <= nstring.length - 1; index++) {
+        char = nstring.charAt(index)
+        if (char == ".") {
+            light.setAll(0x7f00ff)
+        } else {
+            if (char == "\"-\"") {
+                light.setAll(0x000000)
+            } else {
+                shoDigit(parseFloat(char), ncolor)
+            }
+        }
+    }
+}
+function shoDigit (num: number, color2: number) {
+    if (num == 0) {
+        light.setAll(0x00ff00)
+    } else {
+        for (let index2 = 0; index2 <= num - 1; index2++) {
+            light.setPixelColor(index2, color2)
+        }
+    }
+    pause(500)
+    light.setAll(0x000000)
+}
+input.buttonA.onEvent(ButtonEvent.Click, function () {
+    doDisplay(input.temperature(TemperatureUnit.Fahrenheit))
+})
+input.buttonB.onEvent(ButtonEvent.Click, function () {
+    doDisplay(input.temperature(TemperatureUnit.Celsius))
+})
