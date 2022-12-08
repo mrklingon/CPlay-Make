@@ -1,0 +1,172 @@
+function testSeq () {
+    match = true
+    for (let in2 = 0; in2 <= seqlen - 1; in2++) {
+        if (tryseq[in2] != seq[in2]) {
+            match = false
+        }
+    }
+}
+function addTry (_try: number) {
+    if (seqlen > trylen) {
+        light.setAll(0xff00ff)
+        tryseq.push(_try)
+        trylen += 1
+    }
+    if (seqlen == trylen) {
+        light.setAll(0xff8000)
+        testSeq()
+        if (match) {
+            light.showAnimation(light.rainbowAnimation, 2000)
+            music.playMelody("C F B C5 G C5 C5 C5 ", 120)
+            seqlen += 1
+        } else {
+            light.showAnimation(light.theaterChaseAnimation, 500)
+        }
+        tryseq = []
+        trylen = 0
+    }
+}
+function doNE () {
+    light.setAll(0x000000)
+    for (let value of ne) {
+        light.setPixelColor(value, 0xffff00)
+    }
+    music.playTone(988, music.beat(BeatFraction.Half))
+    pause(500)
+    light.setAll(0x000000)
+}
+function doSeqN (sq: number) {
+    if (human == true) {
+        music.baDing.play()
+        addTry(sq)
+    }
+    if (sq == 0) {
+        doNW()
+    }
+    if (sq == 1) {
+        doSW()
+    }
+    if (sq == 2) {
+        doSE()
+    }
+    if (sq == 3) {
+        doNE()
+    }
+}
+function mkSeq (len: number) {
+    light.showAnimation(light.sparkleAnimation, 500)
+    seq = []
+    tryseq = []
+    trylen = 0
+    for (let i = 0; i < len; i++) {
+        seq.push(Math.randomRange(0, 3))
+    }
+    for (let v1 of seq) {
+        doSeqN(v1)
+    }
+}
+function doSE () {
+    light.setAll(0x000000)
+    for (let value2 of se) {
+        light.setPixelColor(value2, 0xff0000)
+    }
+    music.playTone(523, music.beat(BeatFraction.Half))
+    pause(500)
+    light.setAll(0x000000)
+}
+function doSW () {
+    light.setAll(0x000000)
+    for (let value3 of sw) {
+        light.setPixelColor(value3, 0x00ff00)
+    }
+    music.playTone(262, music.beat(BeatFraction.Half))
+    pause(500)
+    light.setAll(0x000000)
+}
+input.onGesture(Gesture.Shake, function () {
+    human = false
+    mkSeq(seqlen)
+    human = true
+})
+input.touchA4.onEvent(ButtonEvent.Click, function () {
+    if (human) {
+        doSeqN(0)
+    }
+})
+function doNW () {
+    light.setAll(0x000000)
+    for (let value4 of nw) {
+        light.setPixelColor(value4, 0x0000ff)
+    }
+    music.playTone(131, music.beat(BeatFraction.Half))
+    pause(500)
+    light.setAll(0x000000)
+}
+input.touchA3.onEvent(ButtonEvent.Click, function () {
+    if (human) {
+        doSeqN(3)
+    }
+})
+input.touchA7.onEvent(ButtonEvent.Click, function () {
+    if (human) {
+        doSeqN(1)
+    }
+})
+input.onSwitchMoved(SwitchDirection.Left, function () {
+    music.setVolume(121)
+})
+input.touchA1.onEvent(ButtonEvent.Click, function () {
+    if (human) {
+        doSeqN(2)
+    }
+})
+input.buttonA.onEvent(ButtonEvent.Click, function () {
+    light.showRing(
+    `blue pink red orange green blue pink red orange green`
+    )
+    human = false
+    for (let v2 of tryseq) {
+        doSeqN(v2)
+    }
+    human = true
+})
+input.onSwitchMoved(SwitchDirection.Right, function () {
+    music.setVolume(0)
+})
+input.buttonB.onEvent(ButtonEvent.Click, function () {
+    light.showRing(
+    `blue pink red orange green blue pink red orange green`
+    )
+    human = false
+    for (let v2 of seq) {
+        doSeqN(v2)
+    }
+    human = true
+})
+let seq: number[] = []
+let match = false
+let trylen = 0
+let seqlen = 0
+let human = false
+let ne: number[] = []
+let se: number[] = []
+let sw: number[] = []
+let nw: number[] = []
+let tryseq: number[] = []
+light.showAnimation(light.rainbowAnimation, 500)
+tryseq = []
+nw = [0, 1, 2]
+sw = [2, 3, 4]
+se = [5, 6, 7]
+ne = [7, 8, 9]
+human = false
+music.setVolume(121)
+if (input.switchRight()) {
+    music.setVolume(0)
+}
+for (let index = 0; index <= 3; index++) {
+    doSeqN(index)
+}
+human = true
+seqlen = 4
+trylen = 0
