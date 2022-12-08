@@ -1,0 +1,114 @@
+function blinkNum (num: number) {
+    number = convertToText(num)
+    for (let index = 0; index <= number.length - 1; index++) {
+        light.setAll(0xffff00)
+        for (let index2 = 0; index2 <= parseFloat(number.charAt(index)) - 1; index2++) {
+            light.setPixelColor(index2, 0x0000ff)
+        }
+        pause(1000)
+    }
+    light.setAll(0x000000)
+}
+function init () {
+    Score = 0
+    light.showAnimation(light.rainbowAnimation, 500)
+    vaders = [1, 0, 9, 8]
+    ship = [3, 4, 5, 6]
+    light.setAll(0x000000)
+    shiploc = 0
+    torp = torps
+    light.setPixelColor(ship[shiploc], 0x0000ff)
+    pause(100)
+    distance = 22
+    for (let value of vaders) {
+        light.setPixelColor(value, light.rgb(0, distance, 0))
+    }
+}
+input.buttonA.onEvent(ButtonEvent.Click, function () {
+    light.setPixelColor(ship[shiploc], 0x000000)
+    shiploc = shiploc - 1
+    if (shiploc < 0) {
+        shiploc = 0
+    }
+    light.setPixelColor(ship[shiploc], 0x0000ff)
+})
+input.onSwitchMoved(SwitchDirection.Left, function () {
+    music.setVolume(255)
+})
+input.onSwitchMoved(SwitchDirection.Right, function () {
+    music.setVolume(0)
+})
+input.buttonB.onEvent(ButtonEvent.Click, function () {
+    light.setPixelColor(ship[shiploc], 0x000000)
+    shiploc = shiploc + 1
+    if (shiploc > 3) {
+        shiploc = 3
+    }
+    light.setPixelColor(ship[shiploc], 0x0000ff)
+})
+input.buttonsAB.onEvent(ButtonEvent.Click, function () {
+    if (torp > 0) {
+        torp += -1
+        if (light.rgb(0, 0, 0) != light.pixelColor(vaders[shiploc])) {
+            music.baDing.play()
+            Score += Math.randomRange(5, 10)
+            light.setPixelColor(vaders[shiploc], 0xff0000)
+        } else {
+            light.setPixelColor(vaders[shiploc], 0xffffff)
+            music.playTone(131, music.beat(BeatFraction.Quarter))
+        }
+        pause(200)
+        light.setPixelColor(vaders[shiploc], 0x000000)
+    } else {
+        light.showAnimation(light.sparkleAnimation, 500)
+        blinkNum(Score)
+        light.showAnimation(light.rainbowAnimation, 500)
+        if (TopScore < Score) {
+            TopScore = Score
+            music.playMelody("C5 C5 C5 G A B C5 B ", 120)
+            music.playMelody("A G G - - - - - ", 120)
+            light.showAnimation(light.theaterChaseAnimation, 500)
+        } else {
+            light.setAll(0x0000ff)
+            music.wawawawaa.play()
+        }
+        torps += Math.randomRange(2, 5)
+        init()
+    }
+})
+let distance = 0
+let torp = 0
+let shiploc = 0
+let ship: number[] = []
+let vaders: number[] = []
+let Score = 0
+let number = ""
+let torps = 0
+let TopScore = 0
+TopScore = 0
+torps = 10
+init()
+forever(function () {
+    while (0 < torp) {
+        for (let value of vaders) {
+            if (light.rgb(0, 0, 0) != light.pixelColor(value)) {
+                light.setPixelColor(value, light.rgb(0, distance, 0))
+            }
+        }
+        pause(200)
+    }
+})
+forever(function () {
+    while (0 < torp) {
+        pause(500 * Math.randomRange(3, 8))
+        for (let value of vaders) {
+            light.setPixelColor(value, light.rgb(Math.randomRange(0, 30), Math.randomRange(0, 30), 0))
+        }
+    }
+})
+forever(function () {
+    while (0 < torp) {
+        pause(500 * Math.randomRange(1, 3))
+        light.setPixelColor(vaders[Math.randomRange(0, 3)], 0x000000)
+    }
+})
