@@ -1,0 +1,148 @@
+function shoNum (inp: number) {
+    doPause()
+    str = convertToText(inp)
+    for (let index3 = 0; index3 <= str.length - 1; index3++) {
+        shoDigit(parseFloat(str.substr(index3, 1)))
+    }
+    unPause()
+}
+function shoDigit (num: number) {
+    light.setAll(0x000000)
+    if (0 == num) {
+        light.setAll(0x999999)
+    } else {
+        for (let index = 0; index <= num - 1; index++) {
+            light.setPixelColor(index, 0x00ffff)
+        }
+    }
+    pause(500)
+    light.setAll(0x000000)
+}
+input.touchA2.onEvent(ButtonEvent.Click, function () {
+    shoNum(score)
+})
+input.onGesture(Gesture.Shake, function () {
+    doPause()
+    light.showAnimation(light.rainbowAnimation, 500)
+    light.setAll(0x000000)
+    loc = [0, 1, 2, 3]
+    score = 0
+    unPause()
+})
+function unPause () {
+    pause2 = false
+}
+function doPause () {
+    pause2 = true
+}
+input.buttonA.onEvent(ButtonEvent.Click, function () {
+    light.setPixelColor(lpad[launch], 0x000000)
+    launch += -1
+    if (0 > launch) {
+        launch = 0
+    }
+})
+input.onSwitchMoved(SwitchDirection.Left, function () {
+    music.setVolume(30)
+})
+input.buttonsAB.onEvent(ButtonEvent.Click, function () {
+    doPause()
+    peek = light.pixelColor(sky[launch])
+    if (Colors.Black != peek) {
+        music.magicWand.play()
+        light.setAll(peek)
+        pause(1000)
+        light.setAll(0x000000)
+        score += scores[pix.indexOf(peek)]
+    } else {
+        music.pewPew.play()
+    }
+    unPause()
+})
+input.onSwitchMoved(SwitchDirection.Right, function () {
+    music.setVolume(0)
+})
+input.buttonB.onEvent(ButtonEvent.Click, function () {
+    light.setPixelColor(lpad[launch], 0x000000)
+    launch += 1
+    if (3 < launch) {
+        launch = 3
+    }
+})
+let peek = 0
+let str = ""
+let pause2 = false
+let score = 0
+let launch = 0
+let loc: number[] = []
+let pix: number[] = []
+let scores: number[] = []
+let lpad: number[] = []
+let sky: number[] = []
+light.showAnimation(light.rainbowAnimation, 500)
+light.setAll(0x000000)
+// in relation to one earth year == 100
+sky = [1, 0, 9, 8]
+// in relation to one earth year == 100
+lpad = [3, 4, 5, 6]
+// in relation to one earth year == 100
+scores = [40, 30, 20, 10]
+// in relation to one earth year == 100
+let cosmos = [2, 1, 0, 9, 8, 7, 8, 9, 0, 1]
+// in relation to one earth year == 100
+let period = [24, 62, 100, 188]
+let planets = ["Mercury", "Venus", "Earth", "Mars"]
+pix = [light.rgb(255, 0, 0), Colors.Yellow, light.rgb(0, 255, 0), light.rgb(146, 0, 148)]
+loc = [0, 0, 0, 0]
+for (let index = 0; index <= 3; index++) {
+    light.setPixelColor(loc[index], pix[index])
+    pause(200)
+}
+launch = 0
+score = 0
+pause2 = false
+// Mercury
+forever(function () {
+    if (!(pause2)) {
+        light.setPixelColor(cosmos[loc[0]], 0x000000)
+        loc[0] = (loc[0] + 1) % 10
+        light.setPixelColor(cosmos[loc[0]], pix[0])
+        pause(10 * period[0])
+    }
+})
+// Venus
+forever(function () {
+    if (!(pause2)) {
+        light.setPixelColor(cosmos[loc[1]], 0x000000)
+        loc[1] = (loc[1] + 1) % 10
+        light.setPixelColor(cosmos[loc[1]], pix[1])
+        pause(10 * period[1])
+    }
+})
+// Earth
+forever(function () {
+    if (!(pause2)) {
+        light.setPixelColor(cosmos[loc[2]], 0x000000)
+        loc[2] = (loc[2] + 1) % 10
+        light.setPixelColor(cosmos[loc[2]], pix[2])
+        pause(10 * period[2])
+    }
+})
+// Mars
+forever(function () {
+    if (!(pause2)) {
+        light.setPixelColor(cosmos[loc[3]], 0x000000)
+        loc[3] = (loc[3] + 1) % 10
+        light.setPixelColor(cosmos[loc[3]], pix[3])
+        pause(10 * period[3])
+    }
+})
+forever(function () {
+    if (!(pause2)) {
+        light.setPixelColor(lpad[launch], 0x0000ff)
+        for (let index2 = 0; index2 <= 3; index2++) {
+            light.setPixelColor(cosmos[loc[index2]], pix[index2])
+            pause(200)
+        }
+    }
+})
