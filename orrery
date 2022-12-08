@@ -1,0 +1,43 @@
+// in relation to one earth year == 100
+let period = [24, 62, 100, 188]
+let planets = ["Mercury", "Venus", "Earth", "Mars"]
+let pix = [light.rgb(255, 0, 0), Colors.Yellow, light.rgb(0, 255, 0), light.rgb(146, 0, 148)]
+let loc = [0, 0, 0, 0]
+for (let index = 0; index <= 3; index++) {
+    light.setPixelColor(loc[index], pix[index])
+    pause(200)
+}
+// Earth
+forever(function () {
+    light.setPixelColor(loc[2], 0x000000)
+    loc[2] = (loc[2] + 1) % 10
+    light.setPixelColor(loc[2], pix[2])
+    pause(10 * period[2])
+})
+// Mercury
+forever(function () {
+    light.setPixelColor(loc[0], 0x000000)
+    loc[0] = (loc[0] + 1) % 10
+    light.setPixelColor(loc[0], pix[0])
+    pause(10 * period[0])
+})
+// venus
+forever(function () {
+    light.setPixelColor(loc[1], 0x000000)
+    loc[1] = (loc[1] + 1) % 10
+    light.setPixelColor(loc[1], pix[1])
+    pause(10 * period[1])
+})
+// mars
+forever(function () {
+    light.setPixelColor(loc[3], 0x000000)
+    loc[3] = (loc[3] + 1) % 10
+    light.setPixelColor(loc[3], pix[3])
+    pause(10 * period[3])
+})
+forever(function () {
+    for (let index2 = 0; index2 <= 3; index2++) {
+        light.setPixelColor(loc[index2], pix[index2])
+        pause(200)
+    }
+})
