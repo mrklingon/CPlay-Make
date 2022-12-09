@@ -1,0 +1,40 @@
+input.onGesture(Gesture.Shake, function () {
+    music.magicWand.play()
+    storm = 100
+})
+let flake = 0
+let storm = 0
+light.setAll(0x0000ff)
+let ground = [3, 4, 5, 6]
+let fallLeft = [0, 1, 2, 3]
+let fallRight = [9, 8, 7, 6]
+let snow1 = light.rgb(20, 20, 20)
+let snow2 = light.rgb(120, 120, 120)
+let snow3 = light.rgb(220, 220, 220)
+let flakes = [snow1, snow2, snow3]
+for (let value of ground) {
+    light.setPixelColor(value, flakes[Math.randomRange(0, 2)])
+}
+storm = 0
+forever(function () {
+    if (storm > 0) {
+        flake = flakes[Math.randomRange(0, 2)]
+        for (let value of fallLeft) {
+            light.setPixelColor(value, flake)
+            pause(70 * Math.randomRange(1, 8))
+            light.setPixelColor(value, 0x0000ff)
+        }
+        storm += -1
+    }
+})
+forever(function () {
+    if (storm > 0) {
+        flake = flakes[Math.randomRange(0, 2)]
+        for (let value of fallRight) {
+            light.setPixelColor(value, flake)
+            pause(70 * Math.randomRange(1, 8))
+            light.setPixelColor(value, 0x0000ff)
+        }
+        storm += -1
+    }
+})
