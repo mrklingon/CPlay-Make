@@ -2,6 +2,12 @@ input.onGesture(Gesture.Shake, function () {
     music.magicWand.play()
     storm = 100
 })
+input.onSwitchMoved(SwitchDirection.Right, function () {
+    music.setVolume(10)
+})
+input.onSwitchMoved(SwitchDirection.Left, function () {
+    music.setVolume(100)
+})
 let flake = 0
 let storm = 0
 light.setAll(0x0000ff)
@@ -16,6 +22,11 @@ for (let value of ground) {
     light.setPixelColor(value, flakes[Math.randomRange(0, 2)])
 }
 storm = 0
+if (input.switchRight()) {
+    music.setVolume(10)
+} else {
+    music.setVolume(100)
+}
 forever(function () {
     if (storm > 0) {
         flake = flakes[Math.randomRange(0, 2)]
