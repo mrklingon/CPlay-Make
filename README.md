@@ -2,6 +2,7 @@
 Circuit Playground Makecode stored in Javascript
 
 * Aether-cannon  - game based on Orrery
+* DS9 - simple Deep Space Nine game.
 * Invaders  - Invaders game
 * LCA-antimatter  - Linear Cellular Automata
 * Morse-Ext  - Morse Code basics
