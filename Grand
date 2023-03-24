@@ -1,0 +1,98 @@
+function init() {
+    east = [1, 2, -1, 2, 3, 4, 5, 8, 9, 0]
+    west = [9, 0, 1, 4, 5, 6, 7, -1, 7, 8]
+    south = [-1, 0, 1, 2, 3, 6, 7, 8, 9, -1]
+    north = [1, 2, 3, 4, -1, -1, 5, 6, 7, 8]
+}
+input.onGesture(Gesture.Shake, function () {
+    light.setAll(0x000000)
+    for (let i = 0; i < 60; i++) {
+        light.setPixelColor(Math.randomRange(0, 9), light.rgb(Math.randomRange(0, 200), Math.randomRange(0, 200), Math.randomRange(0, 200)))
+    }
+})
+input.onGesture(Gesture.TiltLeft, function () {
+    next = []
+    for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 10; i++) {
+            next.push(Colors.Black)
+        }
+        for (let index = 0; index <= 9; index++) {
+            if (-1 != east[index]) {
+                next[east[index]] = light.pixelColor(index)
+            }
+        }
+        for (let index = 0; index <= 9; index++) {
+            light.setPixelColor(index, next[index])
+        }
+    }
+})
+input.onGesture(Gesture.TiltDown, function () {
+    next = []
+    for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 10; i++) {
+            next.push(Colors.Black)
+        }
+        for (let index = 0; index <= 9; index++) {
+            if (-1 != south[index]) {
+                next[south[index]] = light.pixelColor(index)
+            }
+        }
+        for (let index = 0; index <= 9; index++) {
+            light.setPixelColor(index, next[index])
+        }
+    }
+})
+input.onGesture(Gesture.TiltRight, function () {
+    next = []
+    for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 10; i++) {
+            next.push(Colors.Black)
+        }
+        for (let index = 0; index <= 9; index++) {
+            if (-1 != west[index]) {
+                next[west[index]] = light.pixelColor(index)
+            }
+        }
+        for (let index = 0; index <= 9; index++) {
+            light.setPixelColor(index, next[index])
+        }
+    }
+    light.setAll(0x000000)
+})
+input.onGesture(Gesture.TiltUp, function () {
+    next = []
+    for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 10; i++) {
+            next.push(Colors.Black)
+        }
+        for (let index = 0; index <= 9; index++) {
+            if (-1 != north[index]) {
+                next[north[index]] = light.pixelColor(index)
+            }
+        }
+        for (let index = 0; index <= 9; index++) {
+            light.setPixelColor(index, next[index])
+        }
+    }
+})
+input.buttonA.onEvent(ButtonEvent.Click, function () {
+    pix = light.rgb(Math.randomRange(0, 200), Math.randomRange(0, 200), Math.randomRange(0, 200))
+    for (let index = 0; index <= 9; index++) {
+        light.setPixelColor(index, pix)
+        pause(100)
+    }
+})
+input.buttonB.onEvent(ButtonEvent.Click, function () {
+    pix = light.rgb(Math.randomRange(0, 200), Math.randomRange(0, 200), Math.randomRange(0, 200))
+    for (let index = 0; index <= 9; index++) {
+        light.setPixelColor(9 - index, pix)
+        pause(100)
+    }
+})
+let pix = 0
+let next: number[] = []
+let north: number[] = []
+let south: number[] = []
+let west: number[] = []
+let east: number[] = []
+init()
