@@ -1,0 +1,95 @@
+function makeWall (dir: number, color2: number) {
+    if (dir == 0) {
+        for (let value of north) {
+            light.setPixelColor(value, color2)
+        }
+    }
+    if (dir == 1) {
+        for (let value of east) {
+            light.setPixelColor(value, color2)
+        }
+    }
+    if (dir == 2) {
+        for (let value of south) {
+            light.setPixelColor(value, color2)
+        }
+    }
+    if (dir == 3) {
+        for (let value of west) {
+            light.setPixelColor(value, color2)
+        }
+    }
+}
+function doNewRoom () {
+    roomx = [0, 0, 0, 0]
+    for (let i = 0; i < 3; i++) {
+        roomx[Math.randomRange(0, 3)] = 1
+    }
+}
+input.onGesture(Gesture.Shake, function () {
+    newRoom()
+})
+function newRoom () {
+    doNewRoom()
+    light.clear()
+    for (let index2 = 0; index2 <= 3; index2++) {
+        if (roomx[index2] == 1) {
+            makeWall(index2, Colors.Blue)
+        }
+    }
+}
+input.onGesture(Gesture.TiltLeft, function () {
+    if (1 == roomx[3]) {
+        makeWall(3, Colors.Red)
+        music.pewPew.play()
+        pause(100)
+        makeWall(3, Colors.Blue)
+    } else {
+        newRoom()
+        x += -1
+    }
+})
+input.onGesture(Gesture.TiltUp, function () {
+    if (1 == roomx[2]) {
+        makeWall(2, Colors.Red)
+        music.pewPew.play()
+        pause(100)
+        makeWall(2, Colors.Blue)
+    } else {
+        newRoom()
+        y += 1
+    }
+})
+input.onGesture(Gesture.TiltRight, function () {
+    if (1 == roomx[1]) {
+        makeWall(1, Colors.Red)
+        music.pewPew.play()
+        pause(100)
+        makeWall(1, Colors.Blue)
+    } else {
+        newRoom()
+        x += 1
+    }
+})
+input.onGesture(Gesture.TiltDown, function () {
+    if (1 == roomx[0]) {
+        makeWall(0, Colors.Red)
+        music.pewPew.play()
+        pause(100)
+        makeWall(0, Colors.Blue)
+    } else {
+        newRoom()
+        y += -1
+    }
+})
+let roomx: number[] = []
+let east: number[] = []
+let west: number[] = []
+let south: number[] = []
+let north: number[] = []
+north = [1, 0, 9, 8]
+south = [3, 4, 5, 6]
+west = [1, 2, 3]
+east = [6, 7, 8]
+let x = 0
+let y = 0
