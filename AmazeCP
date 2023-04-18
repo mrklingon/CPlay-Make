@@ -1,3 +1,21 @@
+function delta () {
+    old = dist
+    howFar()
+    closer = 0
+    if (dist < old) {
+        closer = 1
+        music.playTone(784, music.beat(BeatFraction.Quarter))
+    }
+    if (dist > old) {
+        closer = -1
+        music.playTone(131, music.beat(BeatFraction.Quarter))
+    }
+}
+function howFar () {
+    xdiff = 10 - x
+    ydiff = 10 - y
+    dist = Math.sqrt(xdiff * xdiff + ydiff * ydiff)
+}
 function makeWall (dir: number, color2: number) {
     if (dir == 0) {
         for (let value of north) {
@@ -26,9 +44,6 @@ function doNewRoom () {
         roomx[Math.randomRange(0, 3)] = 1
     }
 }
-input.onGesture(Gesture.Shake, function () {
-    newRoom()
-})
 function newRoom () {
     doNewRoom()
     light.clear()
@@ -47,6 +62,7 @@ input.onGesture(Gesture.TiltLeft, function () {
     } else {
         newRoom()
         x += -1
+        delta()
     }
 })
 input.onGesture(Gesture.TiltUp, function () {
@@ -58,6 +74,7 @@ input.onGesture(Gesture.TiltUp, function () {
     } else {
         newRoom()
         y += 1
+        delta()
     }
 })
 input.onGesture(Gesture.TiltRight, function () {
@@ -69,6 +86,7 @@ input.onGesture(Gesture.TiltRight, function () {
     } else {
         newRoom()
         x += 1
+        delta()
     }
 })
 input.onGesture(Gesture.TiltDown, function () {
@@ -80,9 +98,17 @@ input.onGesture(Gesture.TiltDown, function () {
     } else {
         newRoom()
         y += -1
+        delta()
     }
 })
 let roomx: number[] = []
+let ydiff = 0
+let xdiff = 0
+let closer = 0
+let dist = 0
+let old = 0
+let y = 0
+let x = 0
 let east: number[] = []
 let west: number[] = []
 let south: number[] = []
@@ -91,5 +117,12 @@ north = [1, 0, 9, 8]
 south = [3, 4, 5, 6]
 west = [1, 2, 3]
 east = [6, 7, 8]
-let x = 0
-let y = 0
+x = 0
+y = 0
+newRoom()
+forever(function () {
+    if (x == 10 && y == 10) {
+        light.showAnimation(light.rainbowAnimation, 500)
+        music.magicWand.playUntilDone()
+    }
+})
