@@ -1,0 +1,33 @@
+input.buttonA.onEvent(ButtonEvent.Click, function () {
+    light.showAnimation(light.rainbowAnimation, 500)
+    music.playMelody("E D G F B A C5 B ", 243)
+    keyboard.type("Jedi ")
+    keyboard.type("" + jedi[Math.randomRange(0, jedi.length - 1)])
+})
+input.buttonB.onEvent(ButtonEvent.Click, function () {
+    light.showAnimation(light.sparkleAnimation, 500)
+    music.magicWand.play()
+    keyboard.type("Jedi ")
+    keyboard.type("" + jedi[Math.randomRange(0, jedi.length - 1)])
+    keyboard.type(" ")
+    keyboard.type("" + Travel[Math.randomRange(0, Travel.length - 1)])
+    keyboard.type(" ")
+    keyboard.type("" + planets[Math.randomRange(0, planets.length - 1)])
+    keyboard.type(" using ")
+    keyboard.type("" + ships[Math.randomRange(0, ships.length - 1)])
+})
+input.onSwitchMoved(SwitchDirection.Right, function () {
+    music.setVolume(0)
+})
+input.onSwitchMoved(SwitchDirection.Left, function () {
+    music.setVolume(86)
+})
+let Travel: string[] = []
+let jedi: string[] = []
+let planets: string[] = []
+let ships: string[] = []
+ships = ["Kalee Bastion", "Gand Navigator", "Calamity", "Harmony", "Blade", "Beast", "Mandalorian Mercenary", "Naboo Brute", "Devaron Marauder", "Messenger"]
+planets = ["Lelsodi", "Asem", "Chevu", "Russuc", "Okind", "Truth", "Tor", "Urre", "Vit", "Yus"]
+music.setVolume(86)
+jedi = ["Dansinc Romerai", "Calrya Popwadh", "Micdom Connbene", "Josbray Aswgrah", "Rylejov Cradeer", "Coopalfr Belcros", "Coleconn Haynnor", "Jortrav Plarode", "Giantyle Permilb", "Brygabr Vinerr"]
+Travel = ["escapes from", "returns from ", "flies to"]
