@@ -1,0 +1,45 @@
+function doPrint (msg: string) {
+    light.setAll(0x000000)
+    for (let index = 0; index <= msg.length - 1; index++) {
+        music.playTone(Math.randomRange(220, 660), music.beat(BeatFraction.Sixteenth))
+        chr = msg.charAt(index)
+        inx = 0
+        inx = alphabet.indexOf(chr)
+        light.setPixelColor(index % 10, colors[inx])
+        pause(100)
+    }
+}
+input.onGesture(Gesture.Shake, function () {
+    music.magicWand.play()
+    light.showAnimation(light.rainbowAnimation, 500)
+    light.setAll(0x000000)
+})
+input.onSwitchMoved(SwitchDirection.Right, function () {
+    music.setVolume(0)
+})
+input.onSwitchMoved(SwitchDirection.Left, function () {
+    music.setVolume(100)
+})
+input.buttonB.onEvent(ButtonEvent.Click, function () {
+    doPrint("a b c d e f g h i j k l m n o p q r s t u v w x y z")
+})
+input.buttonsAB.onEvent(ButtonEvent.Click, function () {
+    doPrint("a")
+})
+input.buttonA.onEvent(ButtonEvent.Click, function () {
+    doPrint(quotes[Math.randomRange(quotes.length, 0 - 1)])
+    pause(2000)
+    light.setAll(0x000000)
+})
+let inx = 0
+let chr = ""
+let colors: number[] = []
+let alphabet = ""
+let quotes: string[] = []
+quotes = ["We're doomed!", "This is all your fault.", "This is madness!", "And I am C-3PO, human-cyborg relations.", "Sir, the possibility of successare approximately 3,720 to 1.", "I can assure you they will never get me onto one of those dreadful starships.", "In the event I don't make it back, I want you to know you've been a real friend, R2.", "I beg your pardon, but what do you mean, `naked?' My parts are showing?", "I am not sure this floor is entirely stable.", "Oh my goodness! Shut me down. Machines building machines. How   perverse.", "I'm programmed for etiquette, not destruction!", "Listen to them! They're dying, R2! Curse my metal body!", "Help! I think I'm melting! This is all your fault!", "You must repair him!", "Sir, if any of my circuits or gears will help,I'll donate them.", "No, I don't think he likes you at all. No, I don't like you either.", "We seem to be made to suffer. It's our lot in life.", "He made a fair move. Screaming about it can't help you.", "That malfunctioning little twerp, this is all his fault.", "You watch your language!", "My joints are freezing up.", "I thought that hairy beast would be the end of me.", "Just open the door, you stupid lug!"]
+alphabet = " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+colors = []
+for (let i = 0; i < 54; i++) {
+    colors.push(light.rgb(Math.randomRange(10, 100), Math.randomRange(10, 100), Math.randomRange(10, 100)))
+    colors[0] = (0, 0, 0)
+}
