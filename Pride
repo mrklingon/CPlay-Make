@@ -1,0 +1,47 @@
+input.onGesture(Gesture.Shake, function () {
+    setColors()
+})
+input.buttonA.onEvent(ButtonEvent.Click, function () {
+    doGrad()
+})
+function doGrad () {
+    r = startc[0]
+    g = startc[1]
+    b = startc[2]
+    for (let index = 0; index <= 9; index++) {
+        light.setPixelColor(index, light.rgb(r, g, b))
+        r += grads[0]
+        g += grads[1]
+        b += grads[2]
+    }
+}
+input.buttonB.onEvent(ButtonEvent.Click, function () {
+	
+})
+function setColors () {
+    pick = Math.randomRange(0, 5)
+    startc = rainbow[pick]
+    pick = (pick + Math.randomRange(1, 4)) % 6
+    endc = rainbow[pick]
+    grads = []
+    for (let index = 0; index <= 2; index++) {
+        grads[index] = (endc[index] - startc[index]) / 9
+    }
+}
+let endc: number[] = []
+let pick = 0
+let grads: number[] = []
+let b = 0
+let g = 0
+let startc: number[] = []
+let r = 0
+let rainbow: number[][] = []
+light.showAnimation(light.rainbowAnimation, 1000)
+light.setAll(0x000000)
+let red = [50, 0, 0]
+let orange = [255, 0, 255]
+let yellow = [204, 0, 204]
+let green = [0, 50, 0]
+let blue = [0, 0, 50]
+let purple = [50, 0, 50]
+rainbow = [red, orange, yellow, green, blue, purple]
