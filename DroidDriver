@@ -1,0 +1,12 @@
+input.buttonA.onEvent(ButtonEvent.Click, function () {
+    light.showAnimation(light.rainbowAnimation, 500)
+    network.infraredSendNumber(1)
+})
+input.buttonsAB.onEvent(ButtonEvent.Click, function () {
+    light.showAnimation(light.sparkleAnimation, 500)
+    network.infraredSendNumber(3)
+})
+input.buttonB.onEvent(ButtonEvent.Click, function () {
+    light.showAnimation(light.colorWipeAnimation, 500)
+    network.infraredSendNumber(2)
+})
