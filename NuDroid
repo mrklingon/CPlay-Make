@@ -1,0 +1,89 @@
+// left arm
+function wave2(num: number) {
+    for (let i = 0; i < num; i++) {
+        light.showAnimation(light.cometAnimation, 500)
+        pins.A1.servoWrite(90)
+        pause(200)
+        pins.A1.servoWrite(0)
+        pause(200)
+        pins.A1.servoWrite(180)
+        pause(200)
+        light.showAnimation(light.rainbowAnimation, 500)
+        pins.A1.servoWrite(90)
+    }
+    light.setAll(0x000000)
+}
+input.touchA5.onEvent(ButtonEvent.Click, function () {
+    wave2(Math.randomRange(2, 6))
+})
+input.buttonA.onEvent(ButtonEvent.Click, function () {
+    ninety()
+})
+input.touchA7.onEvent(ButtonEvent.Click, function () {
+    swing()
+})
+input.buttonB.onEvent(ButtonEvent.Click, function () {
+    one80()
+})
+function swing() {
+    pins.A2.servoWrite(0)
+    pins.A1.servoWrite(0)
+    music.baDing.play()
+    for (let index = 0; index <= 180; index++) {
+        pins.A2.servoWrite(index)
+        pins.A1.servoWrite(index)
+        pause(20)
+    }
+}
+function one80() {
+    pins.A2.servoWrite(180)
+    pins.A1.servoWrite(180)
+}
+function ninety() {
+    pins.A2.servoWrite(90)
+    pins.A1.servoWrite(90)
+}
+function zero() {
+    pins.A2.servoWrite(0)
+    pins.A1.servoWrite(0)
+}
+input.onSwitchMoved(SwitchDirection.Right, function () {
+    swing()
+    while (input.switchRight()) {
+        wave(1)
+        pause(100)
+        wave2(1)
+    }
+})
+// right arm
+function wave(num: number) {
+    for (let i = 0; i < num; i++) {
+        light.showAnimation(light.cometAnimation, 500)
+        pins.A2.servoWrite(90)
+        pause(200)
+        pins.A2.servoWrite(0)
+        pause(200)
+        pins.A2.servoWrite(180)
+        pause(200)
+        light.showAnimation(light.rainbowAnimation, 500)
+        pins.A2.servoWrite(90)
+    }
+    light.setAll(0x000000)
+}
+input.buttonsAB.onEvent(ButtonEvent.Click, function () {
+    zero()
+})
+network.onInfraredReceivedNumber(function (num) {
+    if (num == 1) {
+        wave(Math.randomRange(2, 4))
+    }
+    if (num == 2) {
+        wave2(Math.randomRange(2, 4))
+    }
+    if (num == 3) {
+        swing()
+    }
+})
+input.touchA6.onEvent(ButtonEvent.Click, function () {
+    wave(Math.randomRange(2, 5))
+})
