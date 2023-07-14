@@ -1,0 +1,108 @@
+function bling () {
+    light.showAnimation(light.rainbowAnimation, 500)
+    music.setVolume(3)
+    music.magicWand.play()
+    music.setVolume(40)
+    light.setAll(0x000000)
+}
+function mvRocketB (rocket: number, steps: number) {
+    light.setPixelColor(rocket, 0x000000)
+    runaboutB = rocket
+    if (input.switchRight()) {
+        music.pewPew.play()
+    }
+    for (let i = 0; i < steps; i++) {
+        runaboutB = (runaboutB + 1) % 10
+        if (input.switchRight()) {
+            if (runaboutB == mystery) {
+                bling()
+            }
+        }
+        light.setPixelColor(runaboutB, 0xffff00)
+        pause(100)
+        light.setPixelColor(runaboutB, 0x000000)
+    }
+}
+input.buttonA.onEvent(ButtonEvent.Down, function () {
+    runaboutA = runabout
+    while (input.buttonA.isPressed()) {
+        springA = (springA + 1) % 17
+        light.setPixelColor(runaboutA, 0x00ff00)
+    }
+    mvRocketA(runaboutA, springA)
+    runaboutA = runabout
+})
+input.onGesture(Gesture.TiltLeft, function () {
+    rdex += -1
+    if (rdex < 0) {
+        rdex = 0
+    }
+    light.setPixelColor(runabout, 0x000000)
+    runabout = rlist[rdex]
+})
+input.onGesture(Gesture.TiltRight, function () {
+    rdex += 1
+    if (rdex > 3) {
+        rdex = 3
+    }
+    light.setPixelColor(runabout, 0x000000)
+    runabout = rlist[rdex]
+})
+function mvRocketA (rocket: number, steps: number) {
+    light.setPixelColor(rocket, 0x000000)
+    if (input.switchRight()) {
+        music.pewPew.play()
+    }
+    runaboutA = rocket
+    for (let i = 0; i < steps; i++) {
+        runaboutA = (runaboutA + 9) % 10
+        if (input.switchRight()) {
+            if (runaboutA == mystery) {
+                bling()
+            }
+        }
+        light.setPixelColor(runaboutA, 0x0000ff)
+        pause(100)
+        light.setPixelColor(runaboutA, 0x000000)
+    }
+    runaboutA = 4
+}
+input.buttonB.onEvent(ButtonEvent.Down, function () {
+    runaboutB = runabout
+    while (input.buttonB.isPressed()) {
+        springB = (runaboutB + 1) % 17
+        light.setPixelColor(runaboutB, 0xff0080)
+    }
+    mvRocketB(runaboutB, springB)
+    runaboutB = runabout
+})
+let rlist: number[] = []
+let springB = 0
+let springA = 0
+let runaboutB = 0
+let runaboutA = 0
+let rdex = 0
+let runabout = 0
+let mystery = 0
+mystery = 0
+runabout = 4
+rdex = 1
+runaboutA = 4
+runaboutB = 4
+springA = 0
+springB = 0
+let mlist = [1, 0, 9, 8]
+rlist = [3, 4, 5, 6]
+music.setVolume(64)
+forever(function () {
+    runabout = rlist[rdex]
+    light.setPixelColor(runabout, 0x00ff00)
+})
+forever(function () {
+    if (input.switchRight()) {
+        light.setPixelColor(mystery, 0x000000)
+        mystery = mlist[Math.randomRange(0, 3)]
+        light.setPixelColor(mystery, 0xff8000)
+        pause(1000)
+    }
+})
