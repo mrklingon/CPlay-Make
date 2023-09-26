@@ -1,0 +1,121 @@
+input.buttonsAB.onEvent(ButtonEvent.Click, function () {
+    music.playTone(262, music.beat(BeatFraction.Half))
+    for (let i = 0; i < 10; i++) {
+        doGen()
+        pause(100)
+    }
+})
+function checkSym () {
+    for (let index = 0; index <= 100; index++) {
+        C3[index] = 0
+    }
+    for (let index = 0; index <= 100; index++) {
+        x = Cosmos[index]
+        y = C2[index]
+        if (x != 0 && y != 0) {
+            Move = index + y
+            if (Move >= 0 && Move <= 100) {
+                C3[Move] = x
+            }
+        }
+    }
+}
+function doGen () {
+    for (let index = 0; index <= 100; index++) {
+        C2[index] = 0
+    }
+    for (let index = 0; index <= 100; index++) {
+        G = Cosmos[index]
+        Move = index + G
+        if (Move >= 0 && Move <= 100) {
+            C2[Move] = Cosmos[index]
+        }
+    }
+    checkSym()
+    for (let index = 0; index <= 100; index++) {
+        Cosmos[index] = C2[index]
+        if (C3[index] != 0) {
+            Cosmos[index] = C3[index]
+        }
+    }
+    show()
+}
+input.buttonB.onEvent(ButtonEvent.Click, function () {
+    music.playTone(392, music.beat(BeatFraction.Sixteenth))
+    music.playTone(784, music.beat(BeatFraction.Eighth))
+    doGen()
+})
+function show () {
+    for (let index = 0; index <= 9; index++) {
+        light.setPixelColor(index, Colors2[3 + Cosmos[index + 40]])
+    }
+}
+input.touchA1.onEvent(ButtonEvent.Click, function () {
+    droid = false
+    for (let index = 0; index <= 100; index++) {
+        if (0 == index % 2) {
+            Cosmos[index] = -1
+        } else {
+            Cosmos[index] = 1
+        }
+    }
+    if (input.switchRight()) {
+        droid = true
+    } else {
+        droid = false
+    }
+    show()
+})
+input.onSwitchMoved(SwitchDirection.Left, function () {
+    music.playTone(131, music.beat(BeatFraction.Eighth))
+    droid = false
+})
+input.onSwitchMoved(SwitchDirection.Right, function () {
+    music.playTone(523, music.beat(BeatFraction.Eighth))
+    droid = true
+})
+input.buttonA.onEvent(ButtonEvent.Click, function () {
+    music.playMelody("C5 - B E - - - - ", 240)
+    build()
+    show()
+})
+function build () {
+    Cosmos = []
+    C2 = []
+    C3 = []
+    Colors2 = [Colors.Red, Colors.Orange, Colors.Yellow, Colors.Black, Colors.Green, Colors.Blue, Colors.Violet]
+    for (let i = 0; i < 100; i++) {
+        C2.push(0)
+        C3.push(0)
+        Cosmos.push(Math.randomRange(-3, 3))
+    }
+}
+input.onGesture(Gesture.Shake, function () {
+    for (let index = 0; index <= 100; index++) {
+        light.setPixelColor(index % 10, Colors2[3 + Cosmos[index]])
+        pause(100)
+    }
+    show()
+})
+let Colors2: number[] = []
+let G = 0
+let Move = 0
+let C2: number[] = []
+let y = 0
+let Cosmos: number[] = []
+let x = 0
+let C3: number[] = []
+let droid = false
+build()
+show()
+if (input.switchRight()) {
+    droid = true
+} else {
+    droid = false
+}
+forever(function () {
+    if (droid) {
+        doGen()
+        pause(100)
+    }
+})
